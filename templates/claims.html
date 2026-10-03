@@ -1,0 +1,119 @@
+{% extends 'base.html' %}
+{% block title %}Claims & pickups{% endblock %}
+{% block crumb %}Claims & pickups{% endblock %}
+{% block content %}
+<section class="page-intro">
+  <div>
+    <p class="kicker">Redistribution / chain of custody</p>
+    <h1>Claims & pickups</h1>
+    <p>See every handoff from a surplus listing to its receiving organisation.</p>
+  </div>
+</section>
+
+<div class="filter-row">
+  <div class="filters-group">
+    <a class="filter {% if not selected_status and not search_query %}selected{% endif %}" href="{{ url_for('claims') }}">All</a>
+    {% for option in ['Pending', 'Collected', 'Completed', 'Cancelled'] %}
+      {% set target_status = None if selected_status == option else option %}
+      <a class="filter {% if selected_status == option %}selected{% endif %}" href="{{ url_for('claims', status=target_status, q=search_query if search_query else None) }}">{{ option }}</a>
+    {% endfor %}
+  </div>
+
+  <div class="filter-controls-right">
+    <form class="food-search" method="get" action="{{ url_for('claims') }}">
+      {% if selected_status %}<input type="hidden" name="status" value="{{ selected_status }}">{% endif %}
+      <input name="q" value="{{ search_query }}" placeholder="Search claim #, food, provider, receiver...">
+      <button class="button button-light" type="submit">Search</button>
+      {% if search_query %}
+        <a class="button button-ghost" href="{{ url_for('claims', status=selected_status if selected_status else None) }}">Clear</a>
+      {% endif %}
+    </form>
+  </div>
+</div>
+
+<section class="panel table-panel">
+  <table>
+    <thead>
+      <tr>
+        <th>Claim</th>
+        <th>Food listing</th>
+        <th>Veg / non-veg</th>
+        <th>Exact food item</th>
+        <th>Provider</th>
+        <th>Receiver</th>
+        <th>Quantity</th>
+        <th>Claimed at</th>
+        <th>Status</th>
+        {% if current_user.role in ['admin', 'provider'] %}<th>Action</th>{% endif %}
+      </tr>
+    </thead>
+    <tbody>
+      {% for claim in claims %}
+      <tr>
+        <td class="mono">CL-{{ '%04d'|format(claim.claim_id) }}</td>
+        <td>
+          <strong>{{ claim.food_name }}</strong>
+          <span class="subline">{{ claim.category }}</span>
+        </td>
+        <td>
+          <span class="diet diet-{{ claim.dietary_type|lower|replace('-', '') }}">{{ claim.dietary_type }}</span>
+        </td>
+        <td><strong>{{ claim.food_item }}</strong></td>
+        <td>{{ claim.provider }}</td>
+        <td>{{ claim.receiver }}</td>
+        <td class="mono">{{ claim.claimed_kg }} kg</td>
+        <td class="mono">{{ (claim.claimed_at|string)[:16] }}</td>
+        <td>
+          <span class="status status-{{ claim.status|lower|replace(' ', '-') }}">{{ claim.status }}</span>
+        </td>
+        {% if current_user.role in ['admin', 'provider'] %}
+        <td>
+          {% if claim.status == 'Pending' %}
+            <form class="claim-action-form" method="post" action="{{ url_for('update_claim_status', claim_id=claim.claim_id) }}">
+              <select name="status">
+                <option value="Collected">Mark Collected</option>
+                <option value="Completed">Mark Completed</option>
+                <option value="Cancelled">Cancel Claim</option>
+              </select>
+              <button class="button button-light" type="submit">Update</button>
+            </form>
+          {% else %}
+            <span class="subline">Finalized</span>
+          {% endif %}
+        </td>
+        {% endif %}
+      </tr>
+      {% else %}
+      <tr>
+        <td colspan="{% if current_user.role in ['admin', 'provider'] %}10{% else %}9{% endif %}" class="empty">No claims match this status or search filter.</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</section>
+
+<div class="pagination" aria-label="Claims and pickups pages">
+  <span class="pagination-summary">Showing page {{ page }} of {{ total_pages }} · {{ total_claims }} claims (10 per page)</span>
+  <div class="pagination-links">
+    {% if page > 1 %}
+      <a class="button button-light" href="{{ url_for('claims', page=page - 1, status=selected_status if selected_status else None, q=search_query if search_query else None) }}">← Previous</a>
+    {% else %}
+      <span class="button button-light disabled">← Previous</span>
+    {% endif %}
+
+    <div class="pagination-pages">
+      {% set start_p = [1, page - 2]|max %}
+      {% set end_p = [total_pages, page + 2]|min %}
+      {% for p in range(start_p, end_p + 1) %}
+        <a class="page-pill {% if p == page %}active{% endif %}" href="{{ url_for('claims', page=p, status=selected_status if selected_status else None, q=search_query if search_query else None) }}">{{ p }}</a>
+      {% endfor %}
+    </div>
+
+    {% if page < total_pages %}
+      <a class="button button-dark" href="{{ url_for('claims', page=page + 1, status=selected_status if selected_status else None, q=search_query if search_query else None) }}">Next page →</a>
+    {% else %}
+      <span class="button button-light disabled">Next page →</span>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

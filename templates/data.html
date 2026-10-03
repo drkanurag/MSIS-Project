@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+{% block title %}Data model{% endblock %}
+{% block crumb %}Data model{% endblock %}
+{% block content %}
+<section class="page-intro">
+  <div>
+    <p class="kicker">DBMS / relational schema</p>
+    <h1>Data model</h1>
+    <p>Traceable relational schema connecting providers, food surplus, claims, receivers, and platform roles.</p>
+  </div>
+  <span class="source-tag">{{ db_engine }} local database</span>
+</section>
+
+<div class="relationship">
+  <span>Providers</span>
+  <b>1 → many</b>
+  <span>Food listings</span>
+  <b>1 → many</b>
+  <span>Claims</span>
+  <b>many ← 1</b>
+  <span>Receivers</span>
+  <b>&nbsp;·&nbsp;</b>
+  <span>Users (RBAC)</span>
+</div>
+
+<div class="schema-grid">
+  {% for table_name, columns in tables.items() %}
+  <section class="panel schema-card">
+    <div class="panel-head">
+      <h3>{{ table_name }}</h3>
+      <span class="panel-meta">{{ columns|length }} columns</span>
+    </div>
+    <table class="mini-table">
+      <thead>
+        <tr>
+          <th>Column</th>
+          <th>Type</th>
+          <th>Key</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for column in columns %}
+        <tr>
+          <td class="mono">{{ column['name'] }}</td>
+          <td>{{ column['type'] }}</td>
+          <td>
+            {% if column['pk'] %}
+              <span class="key">PK</span>
+            {% elif column['name'].endswith('_id') %}
+              <span class="key foreign">FK</span>
+            {% endif %}
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </section>
+  {% endfor %}
+</div>
+{% endblock %}

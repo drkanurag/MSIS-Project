@@ -1,0 +1,123 @@
+{% extends 'base.html' %}
+{% block title %}Food listings{% endblock %}
+{% block crumb %}Food listings{% endblock %}
+{% block content %}
+<section class="page-intro">
+  <div>
+    <p class="kicker">Inventory / surplus register</p>
+    <h1>Food listings</h1>
+    <p>Track what is available, where it came from, and when it needs to move.</p>
+  </div>
+  {% if current_user.role == 'provider' %}
+    <a class="button button-dark" href="{{ url_for('new_listing') }}">＋ Add surplus</a>
+  {% endif %}
+</section>
+
+<div class="filter-row">
+  <div class="filters-group">
+    <a class="filter {% if not selected_status and not selected_dietary_type and not food_search %}selected{% endif %}" href="{{ url_for('listings') }}">All</a>
+    {% for option in ['Vegetarian', 'Non-vegetarian'] %}
+      {% set target_diet = None if selected_dietary_type == option else option %}
+      <a class="filter {% if selected_dietary_type == option %}selected{% endif %}" href="{{ url_for('listings', dietary_type=target_diet, status=selected_status if selected_status else None, food=food_search if food_search else None) }}">{{ option }}</a>
+    {% endfor %}
+    {% for option in ['Available', 'Claimed', 'Completed', 'Expired'] %}
+      {% set target_status = None if selected_status == option else option %}
+      <a class="filter {% if selected_status == option %}selected{% endif %}" href="{{ url_for('listings', status=target_status, dietary_type=selected_dietary_type if selected_dietary_type else None, food=food_search if food_search else None) }}">{{ option }}</a>
+    {% endfor %}
+  </div>
+
+  <div class="filter-controls-right">
+    <form class="food-search" method="get" action="{{ url_for('listings') }}">
+      {% if selected_status %}<input type="hidden" name="status" value="{{ selected_status }}">{% endif %}
+      {% if selected_dietary_type %}<input type="hidden" name="dietary_type" value="{{ selected_dietary_type }}">{% endif %}
+      <input name="food" value="{{ food_search }}" placeholder="Search food, provider, city...">
+      <button class="button button-light" type="submit">Search</button>
+      {% if food_search %}
+        <a class="button button-ghost" href="{{ url_for('listings', status=selected_status if selected_status else None, dietary_type=selected_dietary_type if selected_dietary_type else None) }}">Clear</a>
+      {% endif %}
+    </form>
+  </div>
+</div>
+
+<section class="panel table-panel">
+  <table>
+    <thead>
+      <tr>
+        <th>ID / Food</th>
+        <th>Diet</th>
+        <th>Exact Item</th>
+        <th>Provider</th>
+        <th>Location</th>
+        <th>Category</th>
+        <th>Available</th>
+        <th>Deadline</th>
+        <th>Status</th>
+        {% if current_user.role == 'ngo' %}<th>Request</th>{% endif %}
+      </tr>
+    </thead>
+    <tbody>
+      {% for item in listings %}
+      <tr>
+        <td>
+          <strong>#{{ '%04d'|format(item.listing_id) }}</strong>
+          <span class="subline">{{ item.food_name }}</span>
+        </td>
+        <td>
+          <span class="diet diet-{{ item.dietary_type|lower|replace('-', '') }}">{{ item.dietary_type }}</span>
+        </td>
+        <td><strong>{{ item.food_item }}</strong></td>
+        <td>{{ item.provider }}</td>
+        <td>{{ item.location }}</td>
+        <td>{{ item.category }}</td>
+        <td class="mono">{{ item.remaining_kg|round(1) }} kg</td>
+        <td class="mono">{{ (item.expiry_at|string)[:16] }}</td>
+        <td>
+          <span class="status status-{{ item.status|lower|replace(' ', '-') }}">{{ item.status }}</span>
+        </td>
+        {% if current_user.role == 'ngo' %}
+        <td>
+          {% if item.remaining_kg > 0 and item.status in ['Available', 'Claimed'] %}
+            <form class="inline-claim" method="post" action="{{ url_for('claim_listing', listing_id=item.listing_id) }}">
+              <input name="quantity_kg" type="number" min="0.1" max="{{ item.remaining_kg }}" step="0.1" placeholder="kg" required>
+              <button class="button button-dark" type="submit">Claim</button>
+            </form>
+          {% else %}
+            <span class="subline">Unavailable</span>
+          {% endif %}
+        </td>
+        {% endif %}
+      </tr>
+      {% else %}
+      <tr>
+        <td colspan="{% if current_user.role == 'ngo' %}10{% else %}9{% endif %}" class="empty">No listings match this filter.</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</section>
+
+<div class="pagination" aria-label="Food listing pages">
+  <span class="pagination-summary">Showing page {{ page }} of {{ total_pages }} · {{ total_listings }} listings (10 per page)</span>
+  <div class="pagination-links">
+    {% if page > 1 %}
+      <a class="button button-light" href="{{ url_for('listings', page=page - 1, status=selected_status if selected_status else None, dietary_type=selected_dietary_type if selected_dietary_type else None, food=food_search if food_search else None) }}">← Previous</a>
+    {% else %}
+      <span class="button button-light disabled">← Previous</span>
+    {% endif %}
+
+    <div class="pagination-pages">
+      {% set start_p = [1, page - 2]|max %}
+      {% set end_p = [total_pages, page + 2]|min %}
+      {% for p in range(start_p, end_p + 1) %}
+        <a class="page-pill {% if p == page %}active{% endif %}" href="{{ url_for('listings', page=p, status=selected_status if selected_status else None, dietary_type=selected_dietary_type if selected_dietary_type else None, food=food_search if food_search else None) }}">{{ p }}</a>
+      {% endfor %}
+    </div>
+
+    {% if page < total_pages %}
+      <a class="button button-dark" href="{{ url_for('listings', page=page + 1, status=selected_status if selected_status else None, dietary_type=selected_dietary_type if selected_dietary_type else None, food=food_search if food_search else None) }}">Next page →</a>
+    {% else %}
+      <span class="button button-light disabled">Next page →</span>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}
