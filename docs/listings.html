@@ -1,0 +1,360 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Food listings | Food Redistribution Intelligence</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="static/style.css">
+  <script src="https://cdn.plot.ly/plotly-2.35.2.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+</head>
+<body>
+  <div class="bg-3d-scene" aria-hidden="true">
+    <canvas id="bg-3d-canvas" class="bg-3d-canvas"></canvas>
+    <div class="bg-3d-grid"></div>
+    <div class="bg-3d-orb orb-1"></div>
+    <div class="bg-3d-orb orb-2"></div>
+    <div class="bg-3d-orb orb-3"></div>
+    <div class="bg-3d-cube cube-1"></div>
+    <div class="bg-3d-cube cube-2"></div>
+    <div class="bg-3d-polyhedron poly-1"></div>
+    <div class="bg-3d-polyhedron poly-2"></div>
+    <div class="bg-3d-ring ring-1"></div>
+  </div>
+  <div class="app-shell">
+    <aside class="sidebar">
+      <a class="brand" href="index.html"><span class="brand-mark">R</span><span>rooted<span class="brand-dot">.</span></span></a>
+      <p class="eyebrow">Redistribution intelligence</p>
+      <nav>
+        <a class="nav-link " href="index.html"><span>◈</span> Overview</a>
+        <a class="nav-link active" href="listings.html"><span>＋</span> Food listings</a>
+        <a class="nav-link " href="claims.html"><span>↗</span> Claims & pickups</a>
+        <a class="nav-link " href="data.html"><span>▦</span> Data model</a>
+      </nav>
+      <div class="sidebar-foot">
+        <span class="live-dot"></span>
+        <span>PostgreSQL 18 online</span>
+        <span class="mono" id="sidebar-clock-sec">--:--</span>
+      </div>
+    </aside>
+    <main class="main-content">
+      <header class="topbar">
+        <div class="crumb">TAPMI / <strong>Food listings</strong></div>
+        <div class="topbar-actions">
+          <div class="live-clock-badge" id="live-clock-badge" title="Live System Time in Seconds">
+            <span class="live-pulse-dot"></span>
+            <span class="live-clock-time" id="live-clock-time">Loading...</span>
+            <span class="live-clock-role">ADMIN</span>
+          </div>
+          
+          <a class="user-chip" href="login.html" title="Sign out">
+            <span>System Administrator</span><b>↗</b>
+          </a>
+        </div>
+      </header>
+      
+        
+      
+      
+<section class="page-intro">
+  <div>
+    <p class="kicker">Inventory / surplus register</p>
+    <h1>Food listings</h1>
+    <p>Track what is available, where it came from, and when it needs to move.</p>
+  </div>
+  
+</section>
+
+<div class="filter-row">
+  <div class="filters-group">
+    <a class="filter selected" href="listings.html">All</a>
+    
+      
+      <a class="filter " href="listings.html?dietary_type=Vegetarian">Vegetarian</a>
+    
+      
+      <a class="filter " href="listings.html?dietary_type=Non-vegetarian">Non-vegetarian</a>
+    
+    
+      
+      <a class="filter " href="listings.html?status=Available">Available</a>
+    
+      
+      <a class="filter " href="listings.html?status=Claimed">Claimed</a>
+    
+      
+      <a class="filter " href="listings.html?status=Completed">Completed</a>
+    
+      
+      <a class="filter " href="listings.html?status=Expired">Expired</a>
+    
+  </div>
+
+  <div class="filter-controls-right">
+    <form class="food-search" method="get" action="listings.html">
+      
+      
+      <input name="food" value="" placeholder="Search food, provider, city...">
+      <button class="button button-light" type="submit">Search</button>
+      
+    </form>
+  </div>
+</div>
+
+<section class="panel table-panel">
+  <table>
+    <thead>
+      <tr>
+        <th>ID / Food</th>
+        <th>Diet</th>
+        <th>Exact Item</th>
+        <th>Provider</th>
+        <th>Location</th>
+        <th>Category</th>
+        <th>Available</th>
+        <th>Deadline</th>
+        <th>Status</th>
+        
+      </tr>
+    </thead>
+    <tbody>
+      
+      <tr>
+        <td>
+          <strong>#1773</strong>
+          <span class="subline">Curry</span>
+        </td>
+        <td>
+          <span class="diet diet-vegetarian">Vegetarian</span>
+        </td>
+        <td><strong>Vegetable Curry</strong></td>
+        <td>Metro Fresh</td>
+        <td>Udupi</td>
+        <td>Prepared Meals</td>
+        <td class="mono">12.6 kg</td>
+        <td class="mono">2026-09-17 08:17</td>
+        <td>
+          <span class="status status-completed">Completed</span>
+        </td>
+        
+      </tr>
+      
+      <tr>
+        <td>
+          <strong>#1931</strong>
+          <span class="subline">Sandwich</span>
+        </td>
+        <td>
+          <span class="diet diet-vegetarian">Vegetarian</span>
+        </td>
+        <td><strong>Grilled Vegetable Sandwich</strong></td>
+        <td>TAPMI Campus Dining</td>
+        <td>Manipal</td>
+        <td>Prepared Meals</td>
+        <td class="mono">38.2 kg</td>
+        <td class="mono">2026-09-15 16:03</td>
+        <td>
+          <span class="status status-expired">Expired</span>
+        </td>
+        
+      </tr>
+      
+      <tr>
+        <td>
+          <strong>#2323</strong>
+          <span class="subline">Muffins</span>
+        </td>
+        <td>
+          <span class="diet diet-vegetarian">Vegetarian</span>
+        </td>
+        <td><strong>Blueberry Muffins</strong></td>
+        <td>Metro Fresh</td>
+        <td>Udupi</td>
+        <td>Bakery</td>
+        <td class="mono">11.4 kg</td>
+        <td class="mono">2026-09-15 17:49</td>
+        <td>
+          <span class="status status-available">Available</span>
+        </td>
+        
+      </tr>
+      
+      <tr>
+        <td>
+          <strong>#2141</strong>
+          <span class="subline">Yogurt</span>
+        </td>
+        <td>
+          <span class="diet diet-vegetarian">Vegetarian</span>
+        </td>
+        <td><strong>Plain Yogurt</strong></td>
+        <td>Northgate Stores</td>
+        <td>Mysuru</td>
+        <td>Dairy</td>
+        <td class="mono">43.0 kg</td>
+        <td class="mono">2026-09-17 04:27</td>
+        <td>
+          <span class="status status-completed">Completed</span>
+        </td>
+        
+      </tr>
+      
+      <tr>
+        <td>
+          <strong>#1602</strong>
+          <span class="subline">Student Lunch Thali</span>
+        </td>
+        <td>
+          <span class="diet diet-vegetarian">Vegetarian</span>
+        </td>
+        <td><strong>Vegetable Rice Bowl</strong></td>
+        <td>TAPMI Campus Dining</td>
+        <td>Manipal</td>
+        <td>Prepared Meals</td>
+        <td class="mono">45.0 kg</td>
+        <td class="mono">2026-09-15 07:34</td>
+        <td>
+          <span class="status status-available">Available</span>
+        </td>
+        
+      </tr>
+      
+      <tr>
+        <td>
+          <strong>#1603</strong>
+          <span class="subline">Fresh Seasonal Fruits</span>
+        </td>
+        <td>
+          <span class="diet diet-vegetarian">Vegetarian</span>
+        </td>
+        <td><strong>Apples and Bananas</strong></td>
+        <td>TAPMI Campus Dining</td>
+        <td>Manipal</td>
+        <td>Fresh Produce</td>
+        <td class="mono">25.0 kg</td>
+        <td class="mono">2026-09-15 17:34</td>
+        <td>
+          <span class="status status-available">Available</span>
+        </td>
+        
+      </tr>
+      
+      <tr>
+        <td>
+          <strong>#1604</strong>
+          <span class="subline">Paneer Butter Masala</span>
+        </td>
+        <td>
+          <span class="diet diet-vegetarian">Vegetarian</span>
+        </td>
+        <td><strong>Paneer Curry</strong></td>
+        <td>TAPMI Campus Dining</td>
+        <td>Manipal</td>
+        <td>Prepared Meals</td>
+        <td class="mono">30.0 kg</td>
+        <td class="mono">2026-09-15 11:34</td>
+        <td>
+          <span class="status status-available">Available</span>
+        </td>
+        
+      </tr>
+      
+      <tr>
+        <td>
+          <strong>#1605</strong>
+          <span class="subline">Whole Wheat Bread &amp; Pastries</span>
+        </td>
+        <td>
+          <span class="diet diet-vegetarian">Vegetarian</span>
+        </td>
+        <td><strong>Whole Wheat Bread</strong></td>
+        <td>TAPMI Campus Dining</td>
+        <td>Manipal</td>
+        <td>Bakery</td>
+        <td class="mono">20.0 kg</td>
+        <td class="mono">2026-09-16 05:34</td>
+        <td>
+          <span class="status status-available">Available</span>
+        </td>
+        
+      </tr>
+      
+      <tr>
+        <td>
+          <strong>#1606</strong>
+          <span class="subline">Mixed Veg Biryani</span>
+        </td>
+        <td>
+          <span class="diet diet-vegetarian">Vegetarian</span>
+        </td>
+        <td><strong>Vegetable Biryani</strong></td>
+        <td>TAPMI Campus Dining</td>
+        <td>Manipal</td>
+        <td>Prepared Meals</td>
+        <td class="mono">35.0 kg</td>
+        <td class="mono">2026-09-15 05:34</td>
+        <td>
+          <span class="status status-available">Available</span>
+        </td>
+        
+      </tr>
+      
+      <tr>
+        <td>
+          <strong>#2220</strong>
+          <span class="subline">Milk</span>
+        </td>
+        <td>
+          <span class="diet diet-vegetarian">Vegetarian</span>
+        </td>
+        <td><strong>Toned Milk</strong></td>
+        <td>River View Dining</td>
+        <td>Shimoga</td>
+        <td>Dairy</td>
+        <td class="mono">11.6 kg</td>
+        <td class="mono">2026-09-14 17:20</td>
+        <td>
+          <span class="status status-expired">Expired</span>
+        </td>
+        
+      </tr>
+      
+    </tbody>
+  </table>
+</section>
+
+<div class="pagination" aria-label="Food listing pages">
+  <span class="pagination-summary">Showing page 1 of 235 · 2349 listings (10 per page)</span>
+  <div class="pagination-links">
+    
+      <span class="button button-light disabled">← Previous</span>
+    
+
+    <div class="pagination-pages">
+      
+      
+      
+        <a class="page-pill active" href="listings.html?page=1">1</a>
+      
+        <a class="page-pill " href="listings.html?page=2">2</a>
+      
+        <a class="page-pill " href="listings.html?page=3">3</a>
+      
+    </div>
+
+    
+      <a class="button button-dark" href="listings.html?page=2">Next page →</a>
+    
+  </div>
+</div>
+
+    </main>
+  </div>
+    <script src="static/db_data.js"></script>
+  <script src="static/static_engine.js"></script>
+  <script src="static/app.js"></script>
+</body>
+</html>

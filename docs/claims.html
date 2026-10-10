@@ -1,0 +1,418 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Claims & pickups | Food Redistribution Intelligence</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="static/style.css">
+  <script src="https://cdn.plot.ly/plotly-2.35.2.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+</head>
+<body>
+  <div class="bg-3d-scene" aria-hidden="true">
+    <canvas id="bg-3d-canvas" class="bg-3d-canvas"></canvas>
+    <div class="bg-3d-grid"></div>
+    <div class="bg-3d-orb orb-1"></div>
+    <div class="bg-3d-orb orb-2"></div>
+    <div class="bg-3d-orb orb-3"></div>
+    <div class="bg-3d-cube cube-1"></div>
+    <div class="bg-3d-cube cube-2"></div>
+    <div class="bg-3d-polyhedron poly-1"></div>
+    <div class="bg-3d-polyhedron poly-2"></div>
+    <div class="bg-3d-ring ring-1"></div>
+  </div>
+  <div class="app-shell">
+    <aside class="sidebar">
+      <a class="brand" href="index.html"><span class="brand-mark">R</span><span>rooted<span class="brand-dot">.</span></span></a>
+      <p class="eyebrow">Redistribution intelligence</p>
+      <nav>
+        <a class="nav-link " href="index.html"><span>◈</span> Overview</a>
+        <a class="nav-link " href="listings.html"><span>＋</span> Food listings</a>
+        <a class="nav-link active" href="claims.html"><span>↗</span> Claims & pickups</a>
+        <a class="nav-link " href="data.html"><span>▦</span> Data model</a>
+      </nav>
+      <div class="sidebar-foot">
+        <span class="live-dot"></span>
+        <span>PostgreSQL 18 online</span>
+        <span class="mono" id="sidebar-clock-sec">--:--</span>
+      </div>
+    </aside>
+    <main class="main-content">
+      <header class="topbar">
+        <div class="crumb">TAPMI / <strong>Claims & pickups</strong></div>
+        <div class="topbar-actions">
+          <div class="live-clock-badge" id="live-clock-badge" title="Live System Time in Seconds">
+            <span class="live-pulse-dot"></span>
+            <span class="live-clock-time" id="live-clock-time">Loading...</span>
+            <span class="live-clock-role">ADMIN</span>
+          </div>
+          
+          <a class="user-chip" href="login.html" title="Sign out">
+            <span>System Administrator</span><b>↗</b>
+          </a>
+        </div>
+      </header>
+      
+        
+      
+      
+<section class="page-intro">
+  <div>
+    <p class="kicker">Redistribution / chain of custody</p>
+    <h1>Claims & pickups</h1>
+    <p>See every handoff from a surplus listing to its receiving organisation.</p>
+  </div>
+</section>
+
+<div class="filter-row">
+  <div class="filters-group">
+    <a class="filter selected" href="claims.html">All</a>
+    
+      
+      <a class="filter " href="claims.html?status=Pending">Pending</a>
+    
+      
+      <a class="filter " href="claims.html?status=Collected">Collected</a>
+    
+      
+      <a class="filter " href="claims.html?status=Completed">Completed</a>
+    
+      
+      <a class="filter " href="claims.html?status=Cancelled">Cancelled</a>
+    
+  </div>
+
+  <div class="filter-controls-right">
+    <form class="food-search" method="get" action="claims.html">
+      
+      <input name="q" value="" placeholder="Search claim #, food, provider, receiver...">
+      <button class="button button-light" type="submit">Search</button>
+      
+    </form>
+  </div>
+</div>
+
+<section class="panel table-panel">
+  <table>
+    <thead>
+      <tr>
+        <th>Claim</th>
+        <th>Food listing</th>
+        <th>Veg / non-veg</th>
+        <th>Exact food item</th>
+        <th>Provider</th>
+        <th>Receiver</th>
+        <th>Quantity</th>
+        <th>Claimed at</th>
+        <th>Status</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      
+      <tr>
+        <td class="mono">CL-1505</td>
+        <td>
+          <strong>Curry</strong>
+          <span class="subline">Prepared Meals</span>
+        </td>
+        <td>
+          <span class="diet diet-vegetarian">Vegetarian</span>
+        </td>
+        <td><strong>Vegetable Curry</strong></td>
+        <td>Metro Fresh</td>
+        <td>Sana Ali</td>
+        <td class="mono">9.72 kg</td>
+        <td class="mono">2026-09-15 17:17</td>
+        <td>
+          <span class="status status-cancelled">Cancelled</span>
+        </td>
+        
+        <td>
+          
+            <span class="subline">Finalized</span>
+          
+        </td>
+        
+      </tr>
+      
+      <tr>
+        <td class="mono">CL-1787</td>
+        <td>
+          <strong>Yogurt</strong>
+          <span class="subline">Dairy</span>
+        </td>
+        <td>
+          <span class="diet diet-vegetarian">Vegetarian</span>
+        </td>
+        <td><strong>Plain Yogurt</strong></td>
+        <td>Northgate Stores</td>
+        <td>Arjun Iyer</td>
+        <td class="mono">6.16 kg</td>
+        <td class="mono">2026-09-14 22:27</td>
+        <td>
+          <span class="status status-cancelled">Cancelled</span>
+        </td>
+        
+        <td>
+          
+            <span class="subline">Finalized</span>
+          
+        </td>
+        
+      </tr>
+      
+      <tr>
+        <td class="mono">CL-1893</td>
+        <td>
+          <strong>Pastries</strong>
+          <span class="subline">Bakery</span>
+        </td>
+        <td>
+          <span class="diet diet-vegetarian">Vegetarian</span>
+        </td>
+        <td><strong>Apple Cinnamon Pastry</strong></td>
+        <td>Sunrise Kitchens</td>
+        <td>Ashley Mckee</td>
+        <td class="mono">7.16 kg</td>
+        <td class="mono">2026-09-14 00:13</td>
+        <td>
+          <span class="status status-completed">Completed</span>
+        </td>
+        
+        <td>
+          
+            <span class="subline">Finalized</span>
+          
+        </td>
+        
+      </tr>
+      
+      <tr>
+        <td class="mono">CL-1892</td>
+        <td>
+          <strong>Pastries</strong>
+          <span class="subline">Bakery</span>
+        </td>
+        <td>
+          <span class="diet diet-vegetarian">Vegetarian</span>
+        </td>
+        <td><strong>Apple Cinnamon Pastry</strong></td>
+        <td>Sunrise Kitchens</td>
+        <td>Vikram Singh</td>
+        <td class="mono">11.23 kg</td>
+        <td class="mono">2026-09-13 22:13</td>
+        <td>
+          <span class="status status-completed">Completed</span>
+        </td>
+        
+        <td>
+          
+            <span class="subline">Finalized</span>
+          
+        </td>
+        
+      </tr>
+      
+      <tr>
+        <td class="mono">CL-1463</td>
+        <td>
+          <strong>Muffins</strong>
+          <span class="subline">Bakery</span>
+        </td>
+        <td>
+          <span class="diet diet-vegetarian">Vegetarian</span>
+        </td>
+        <td><strong>Blueberry Muffins</strong></td>
+        <td>Sunrise Kitchens</td>
+        <td>Farah Malik</td>
+        <td class="mono">8.48 kg</td>
+        <td class="mono">2026-09-13 21:21</td>
+        <td>
+          <span class="status status-collected">Collected</span>
+        </td>
+        
+        <td>
+          
+            <span class="subline">Finalized</span>
+          
+        </td>
+        
+      </tr>
+      
+      <tr>
+        <td class="mono">CL-1775</td>
+        <td>
+          <strong>Milk</strong>
+          <span class="subline">Dairy</span>
+        </td>
+        <td>
+          <span class="diet diet-vegetarian">Vegetarian</span>
+        </td>
+        <td><strong>Toned Milk</strong></td>
+        <td>Clark, Prince and Williams</td>
+        <td>Kenneth Baker</td>
+        <td class="mono">36.76 kg</td>
+        <td class="mono">2026-09-12 02:07</td>
+        <td>
+          <span class="status status-completed">Completed</span>
+        </td>
+        
+        <td>
+          
+            <span class="subline">Finalized</span>
+          
+        </td>
+        
+      </tr>
+      
+      <tr>
+        <td class="mono">CL-1779</td>
+        <td>
+          <strong>Paneer</strong>
+          <span class="subline">Dairy</span>
+        </td>
+        <td>
+          <span class="diet diet-vegetarian">Vegetarian</span>
+        </td>
+        <td><strong>Paneer Cubes</strong></td>
+        <td>Clark, Prince and Williams</td>
+        <td>John Romero</td>
+        <td class="mono">4.05 kg</td>
+        <td class="mono">2026-09-11 22:20</td>
+        <td>
+          <span class="status status-pending">Pending</span>
+        </td>
+        
+        <td>
+          
+            <form class="claim-action-form" method="post" action="claims.html">
+              <select name="status">
+                <option value="Collected">Mark Collected</option>
+                <option value="Completed">Mark Completed</option>
+                <option value="Cancelled">Cancel Claim</option>
+              </select>
+              <button class="button button-light" type="submit">Update</button>
+            </form>
+          
+        </td>
+        
+      </tr>
+      
+      <tr>
+        <td class="mono">CL-1778</td>
+        <td>
+          <strong>Paneer</strong>
+          <span class="subline">Dairy</span>
+        </td>
+        <td>
+          <span class="diet diet-vegetarian">Vegetarian</span>
+        </td>
+        <td><strong>Paneer Cubes</strong></td>
+        <td>Clark, Prince and Williams</td>
+        <td>Ravi Kumar</td>
+        <td class="mono">53.34 kg</td>
+        <td class="mono">2026-09-11 15:20</td>
+        <td>
+          <span class="status status-cancelled">Cancelled</span>
+        </td>
+        
+        <td>
+          
+            <span class="subline">Finalized</span>
+          
+        </td>
+        
+      </tr>
+      
+      <tr>
+        <td class="mono">CL-1587</td>
+        <td>
+          <strong>Rice</strong>
+          <span class="subline">Staples</span>
+        </td>
+        <td>
+          <span class="diet diet-vegetarian">Vegetarian</span>
+        </td>
+        <td><strong>Basmati Rice</strong></td>
+        <td>TAPMI Campus Dining</td>
+        <td>Vikram Singh</td>
+        <td class="mono">14.81 kg</td>
+        <td class="mono">2026-09-10 22:14</td>
+        <td>
+          <span class="status status-completed">Completed</span>
+        </td>
+        
+        <td>
+          
+            <span class="subline">Finalized</span>
+          
+        </td>
+        
+      </tr>
+      
+      <tr>
+        <td class="mono">CL-1462</td>
+        <td>
+          <strong>Rice</strong>
+          <span class="subline">Staples</span>
+        </td>
+        <td>
+          <span class="diet diet-vegetarian">Vegetarian</span>
+        </td>
+        <td><strong>Basmati Rice</strong></td>
+        <td>Sunrise Kitchens</td>
+        <td>Sonia Menon</td>
+        <td class="mono">22.35 kg</td>
+        <td class="mono">2026-09-10 19:13</td>
+        <td>
+          <span class="status status-completed">Completed</span>
+        </td>
+        
+        <td>
+          
+            <span class="subline">Finalized</span>
+          
+        </td>
+        
+      </tr>
+      
+    </tbody>
+  </table>
+</section>
+
+<div class="pagination" aria-label="Claims and pickups pages">
+  <span class="pagination-summary">Showing page 1 of 195 · 1949 claims (10 per page)</span>
+  <div class="pagination-links">
+    
+      <span class="button button-light disabled">← Previous</span>
+    
+
+    <div class="pagination-pages">
+      
+      
+      
+        <a class="page-pill active" href="claims.html?page=1">1</a>
+      
+        <a class="page-pill " href="claims.html?page=2">2</a>
+      
+        <a class="page-pill " href="claims.html?page=3">3</a>
+      
+    </div>
+
+    
+      <a class="button button-dark" href="claims.html?page=2">Next page →</a>
+    
+  </div>
+</div>
+
+    </main>
+  </div>
+    <script src="static/db_data.js"></script>
+  <script src="static/static_engine.js"></script>
+  <script src="static/app.js"></script>
+</body>
+</html>

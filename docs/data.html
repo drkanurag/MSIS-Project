@@ -1,0 +1,536 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Data model | Food Redistribution Intelligence</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="static/style.css">
+  <script src="https://cdn.plot.ly/plotly-2.35.2.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+</head>
+<body>
+  <div class="bg-3d-scene" aria-hidden="true">
+    <canvas id="bg-3d-canvas" class="bg-3d-canvas"></canvas>
+    <div class="bg-3d-grid"></div>
+    <div class="bg-3d-orb orb-1"></div>
+    <div class="bg-3d-orb orb-2"></div>
+    <div class="bg-3d-orb orb-3"></div>
+    <div class="bg-3d-cube cube-1"></div>
+    <div class="bg-3d-cube cube-2"></div>
+    <div class="bg-3d-polyhedron poly-1"></div>
+    <div class="bg-3d-polyhedron poly-2"></div>
+    <div class="bg-3d-ring ring-1"></div>
+  </div>
+  <div class="app-shell">
+    <aside class="sidebar">
+      <a class="brand" href="index.html"><span class="brand-mark">R</span><span>rooted<span class="brand-dot">.</span></span></a>
+      <p class="eyebrow">Redistribution intelligence</p>
+      <nav>
+        <a class="nav-link " href="index.html"><span>◈</span> Overview</a>
+        <a class="nav-link " href="listings.html"><span>＋</span> Food listings</a>
+        <a class="nav-link " href="claims.html"><span>↗</span> Claims & pickups</a>
+        <a class="nav-link active" href="data.html"><span>▦</span> Data model</a>
+      </nav>
+      <div class="sidebar-foot">
+        <span class="live-dot"></span>
+        <span>PostgreSQL 18 online</span>
+        <span class="mono" id="sidebar-clock-sec">--:--</span>
+      </div>
+    </aside>
+    <main class="main-content">
+      <header class="topbar">
+        <div class="crumb">TAPMI / <strong>Data model</strong></div>
+        <div class="topbar-actions">
+          <div class="live-clock-badge" id="live-clock-badge" title="Live System Time in Seconds">
+            <span class="live-pulse-dot"></span>
+            <span class="live-clock-time" id="live-clock-time">Loading...</span>
+            <span class="live-clock-role">ADMIN</span>
+          </div>
+          
+          <a class="user-chip" href="login.html" title="Sign out">
+            <span>System Administrator</span><b>↗</b>
+          </a>
+        </div>
+      </header>
+      
+        
+      
+      
+<section class="page-intro">
+  <div>
+    <p class="kicker">DBMS / relational schema</p>
+    <h1>Data model</h1>
+    <p>Traceable relational schema connecting providers, food surplus, claims, receivers, and platform roles.</p>
+  </div>
+  <span class="source-tag">PostgreSQL 18 local database</span>
+</section>
+
+<div class="relationship">
+  <span>Providers</span>
+  <b>1 → many</b>
+  <span>Food listings</span>
+  <b>1 → many</b>
+  <span>Claims</span>
+  <b>many ← 1</b>
+  <span>Receivers</span>
+  <b>&nbsp;·&nbsp;</b>
+  <span>Users (RBAC)</span>
+</div>
+
+<div class="schema-grid">
+  
+  <section class="panel schema-card">
+    <div class="panel-head">
+      <h3>providers</h3>
+      <span class="panel-meta">7 columns</span>
+    </div>
+    <table class="mini-table">
+      <thead>
+        <tr>
+          <th>Column</th>
+          <th>Type</th>
+          <th>Key</th>
+        </tr>
+      </thead>
+      <tbody>
+        
+        <tr>
+          <td class="mono">provider_id</td>
+          <td>integer</td>
+          <td>
+            
+              <span class="key">PK</span>
+            
+          </td>
+        </tr>
+        
+        <tr>
+          <td class="mono">name</td>
+          <td>character varying</td>
+          <td>
+            
+          </td>
+        </tr>
+        
+        <tr>
+          <td class="mono">provider_type</td>
+          <td>character varying</td>
+          <td>
+            
+          </td>
+        </tr>
+        
+        <tr>
+          <td class="mono">address</td>
+          <td>text</td>
+          <td>
+            
+          </td>
+        </tr>
+        
+        <tr>
+          <td class="mono">location</td>
+          <td>character varying</td>
+          <td>
+            
+          </td>
+        </tr>
+        
+        <tr>
+          <td class="mono">contact</td>
+          <td>character varying</td>
+          <td>
+            
+          </td>
+        </tr>
+        
+        <tr>
+          <td class="mono">created_at</td>
+          <td>timestamp without time zone</td>
+          <td>
+            
+          </td>
+        </tr>
+        
+      </tbody>
+    </table>
+  </section>
+  
+  <section class="panel schema-card">
+    <div class="panel-head">
+      <h3>food_listings</h3>
+      <span class="panel-meta">13 columns</span>
+    </div>
+    <table class="mini-table">
+      <thead>
+        <tr>
+          <th>Column</th>
+          <th>Type</th>
+          <th>Key</th>
+        </tr>
+      </thead>
+      <tbody>
+        
+        <tr>
+          <td class="mono">listing_id</td>
+          <td>integer</td>
+          <td>
+            
+              <span class="key">PK</span>
+            
+          </td>
+        </tr>
+        
+        <tr>
+          <td class="mono">provider_id</td>
+          <td>integer</td>
+          <td>
+            
+              <span class="key foreign">FK</span>
+            
+          </td>
+        </tr>
+        
+        <tr>
+          <td class="mono">food_name</td>
+          <td>character varying</td>
+          <td>
+            
+          </td>
+        </tr>
+        
+        <tr>
+          <td class="mono">food_item</td>
+          <td>character varying</td>
+          <td>
+            
+          </td>
+        </tr>
+        
+        <tr>
+          <td class="mono">dietary_type</td>
+          <td>character varying</td>
+          <td>
+            
+          </td>
+        </tr>
+        
+        <tr>
+          <td class="mono">location</td>
+          <td>character varying</td>
+          <td>
+            
+          </td>
+        </tr>
+        
+        <tr>
+          <td class="mono">category</td>
+          <td>character varying</td>
+          <td>
+            
+          </td>
+        </tr>
+        
+        <tr>
+          <td class="mono">meal_type</td>
+          <td>character varying</td>
+          <td>
+            
+          </td>
+        </tr>
+        
+        <tr>
+          <td class="mono">quantity_kg</td>
+          <td>numeric</td>
+          <td>
+            
+          </td>
+        </tr>
+        
+        <tr>
+          <td class="mono">listed_at</td>
+          <td>timestamp without time zone</td>
+          <td>
+            
+          </td>
+        </tr>
+        
+        <tr>
+          <td class="mono">expiry_at</td>
+          <td>timestamp without time zone</td>
+          <td>
+            
+          </td>
+        </tr>
+        
+        <tr>
+          <td class="mono">status</td>
+          <td>character varying</td>
+          <td>
+            
+          </td>
+        </tr>
+        
+        <tr>
+          <td class="mono">description</td>
+          <td>text</td>
+          <td>
+            
+          </td>
+        </tr>
+        
+      </tbody>
+    </table>
+  </section>
+  
+  <section class="panel schema-card">
+    <div class="panel-head">
+      <h3>receivers</h3>
+      <span class="panel-meta">7 columns</span>
+    </div>
+    <table class="mini-table">
+      <thead>
+        <tr>
+          <th>Column</th>
+          <th>Type</th>
+          <th>Key</th>
+        </tr>
+      </thead>
+      <tbody>
+        
+        <tr>
+          <td class="mono">receiver_id</td>
+          <td>integer</td>
+          <td>
+            
+              <span class="key">PK</span>
+            
+          </td>
+        </tr>
+        
+        <tr>
+          <td class="mono">name</td>
+          <td>character varying</td>
+          <td>
+            
+          </td>
+        </tr>
+        
+        <tr>
+          <td class="mono">receiver_type</td>
+          <td>character varying</td>
+          <td>
+            
+          </td>
+        </tr>
+        
+        <tr>
+          <td class="mono">location</td>
+          <td>character varying</td>
+          <td>
+            
+          </td>
+        </tr>
+        
+        <tr>
+          <td class="mono">capacity_kg</td>
+          <td>numeric</td>
+          <td>
+            
+          </td>
+        </tr>
+        
+        <tr>
+          <td class="mono">contact</td>
+          <td>character varying</td>
+          <td>
+            
+          </td>
+        </tr>
+        
+        <tr>
+          <td class="mono">created_at</td>
+          <td>timestamp without time zone</td>
+          <td>
+            
+          </td>
+        </tr>
+        
+      </tbody>
+    </table>
+  </section>
+  
+  <section class="panel schema-card">
+    <div class="panel-head">
+      <h3>claims</h3>
+      <span class="panel-meta">7 columns</span>
+    </div>
+    <table class="mini-table">
+      <thead>
+        <tr>
+          <th>Column</th>
+          <th>Type</th>
+          <th>Key</th>
+        </tr>
+      </thead>
+      <tbody>
+        
+        <tr>
+          <td class="mono">claim_id</td>
+          <td>integer</td>
+          <td>
+            
+              <span class="key">PK</span>
+            
+          </td>
+        </tr>
+        
+        <tr>
+          <td class="mono">listing_id</td>
+          <td>integer</td>
+          <td>
+            
+              <span class="key foreign">FK</span>
+            
+          </td>
+        </tr>
+        
+        <tr>
+          <td class="mono">receiver_id</td>
+          <td>integer</td>
+          <td>
+            
+              <span class="key foreign">FK</span>
+            
+          </td>
+        </tr>
+        
+        <tr>
+          <td class="mono">claimed_kg</td>
+          <td>numeric</td>
+          <td>
+            
+          </td>
+        </tr>
+        
+        <tr>
+          <td class="mono">claimed_at</td>
+          <td>timestamp without time zone</td>
+          <td>
+            
+          </td>
+        </tr>
+        
+        <tr>
+          <td class="mono">pickup_at</td>
+          <td>timestamp without time zone</td>
+          <td>
+            
+          </td>
+        </tr>
+        
+        <tr>
+          <td class="mono">status</td>
+          <td>character varying</td>
+          <td>
+            
+          </td>
+        </tr>
+        
+      </tbody>
+    </table>
+  </section>
+  
+  <section class="panel schema-card">
+    <div class="panel-head">
+      <h3>users</h3>
+      <span class="panel-meta">7 columns</span>
+    </div>
+    <table class="mini-table">
+      <thead>
+        <tr>
+          <th>Column</th>
+          <th>Type</th>
+          <th>Key</th>
+        </tr>
+      </thead>
+      <tbody>
+        
+        <tr>
+          <td class="mono">user_id</td>
+          <td>integer</td>
+          <td>
+            
+              <span class="key">PK</span>
+            
+          </td>
+        </tr>
+        
+        <tr>
+          <td class="mono">username</td>
+          <td>character varying</td>
+          <td>
+            
+          </td>
+        </tr>
+        
+        <tr>
+          <td class="mono">password</td>
+          <td>character varying</td>
+          <td>
+            
+          </td>
+        </tr>
+        
+        <tr>
+          <td class="mono">role</td>
+          <td>character varying</td>
+          <td>
+            
+          </td>
+        </tr>
+        
+        <tr>
+          <td class="mono">display_name</td>
+          <td>character varying</td>
+          <td>
+            
+          </td>
+        </tr>
+        
+        <tr>
+          <td class="mono">provider_id</td>
+          <td>integer</td>
+          <td>
+            
+              <span class="key foreign">FK</span>
+            
+          </td>
+        </tr>
+        
+        <tr>
+          <td class="mono">receiver_id</td>
+          <td>integer</td>
+          <td>
+            
+              <span class="key foreign">FK</span>
+            
+          </td>
+        </tr>
+        
+      </tbody>
+    </table>
+  </section>
+  
+</div>
+
+    </main>
+  </div>
+    <script src="static/db_data.js"></script>
+  <script src="static/static_engine.js"></script>
+  <script src="static/app.js"></script>
+</body>
+</html>

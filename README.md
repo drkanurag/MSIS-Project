@@ -1,6 +1,17 @@
 # Rooted: Food Waste Reduction through Surplus Food Redistribution
 **MSIS Group Assignment Project | Applied Data Science, Database & Visualisation Platform**
 
+🌐 **Live Accessible Website:** [**https://drkanurag.github.io/Surplus-Food-Redistribution-Platform/**](https://drkanurag.github.io/Surplus-Food-Redistribution-Platform/)  
+📦 **GitHub Repository:** [**https://github.com/drkanurag/Surplus-Food-Redistribution-Platform**](https://github.com/drkanurag/Surplus-Food-Redistribution-Platform)
+
+| Quick Access | Clickable Link |
+| --- | --- |
+| **Executive Dashboard (Live)** | [Open Overview Dashboard ↗](https://drkanurag.github.io/Surplus-Food-Redistribution-Platform/index.html) |
+| **Surplus Food Listings** | [Open Food Listings Catalog ↗](https://drkanurag.github.io/Surplus-Food-Redistribution-Platform/listings.html) |
+| **Claims & Pickups Ledger** | [Open Claims & Pickups ↗](https://drkanurag.github.io/Surplus-Food-Redistribution-Platform/claims.html) |
+| **Relational Data Model (3NF)** | [Open Data Model Inspector ↗](https://drkanurag.github.io/Surplus-Food-Redistribution-Platform/data.html) |
+| **Role-Based Sign-In Portal** | [Open Login Portal ↗](https://drkanurag.github.io/Surplus-Food-Redistribution-Platform/login.html) |
+
 A full-stack, data-driven web application combining an ACID-compliant relational DBMS (**PostgreSQL 18**), an automated data science analytics pipeline (**Pandas**), and an interactive executive decision dashboard (**Plotly.js + Three.js**).
 
 ---
@@ -71,8 +82,9 @@ The application enforces Role-Based Access Control (RBAC):
 
 ### Setup Steps
 ```powershell
-# 1. Clone/navigate to project directory
-cd "C:\Users\anura\OneDrive - Manipal Academy of Higher Education\Desktop\MSIS PROJECT"
+# 1. Clone and navigate to the project directory
+git clone https://github.com/drkanurag/Surplus-Food-Redistribution-Platform.git
+cd Surplus-Food-Redistribution-Platform
 
 # 2. Configure environment variables in .env (already configured)
 # DB_TYPE=postgres
@@ -89,7 +101,7 @@ pip install -r requirements.txt
 python app.py
 ```
 
-Open **`http://127.0.0.1:5000`** in your browser.
+Open **`http://127.0.0.1:5000`** in your browser (or visit the live web deployment directly at [**https://drkanurag.github.io/Surplus-Food-Redistribution-Platform/**](https://drkanurag.github.io/Surplus-Food-Redistribution-Platform/)).
 
 ---
 

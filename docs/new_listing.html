@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Add surplus | Food Redistribution Intelligence</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="static/style.css">
+  <script src="https://cdn.plot.ly/plotly-2.35.2.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+</head>
+<body>
+  <div class="bg-3d-scene" aria-hidden="true">
+    <canvas id="bg-3d-canvas" class="bg-3d-canvas"></canvas>
+    <div class="bg-3d-grid"></div>
+    <div class="bg-3d-orb orb-1"></div>
+    <div class="bg-3d-orb orb-2"></div>
+    <div class="bg-3d-orb orb-3"></div>
+    <div class="bg-3d-cube cube-1"></div>
+    <div class="bg-3d-cube cube-2"></div>
+    <div class="bg-3d-polyhedron poly-1"></div>
+    <div class="bg-3d-polyhedron poly-2"></div>
+    <div class="bg-3d-ring ring-1"></div>
+  </div>
+  <div class="app-shell">
+    <aside class="sidebar">
+      <a class="brand" href="index.html"><span class="brand-mark">R</span><span>rooted<span class="brand-dot">.</span></span></a>
+      <p class="eyebrow">Redistribution intelligence</p>
+      <nav>
+        <a class="nav-link " href="index.html"><span>◈</span> Overview</a>
+        <a class="nav-link active" href="listings.html"><span>＋</span> Food listings</a>
+        <a class="nav-link " href="claims.html"><span>↗</span> Claims & pickups</a>
+        <a class="nav-link " href="data.html"><span>▦</span> Data model</a>
+      </nav>
+      <div class="sidebar-foot">
+        <span class="live-dot"></span>
+        <span>PostgreSQL 18 online</span>
+        <span class="mono" id="sidebar-clock-sec">--:--</span>
+      </div>
+    </aside>
+    <main class="main-content">
+      <header class="topbar">
+        <div class="crumb">TAPMI / <strong>Add surplus</strong></div>
+        <div class="topbar-actions">
+          <div class="live-clock-badge" id="live-clock-badge" title="Live System Time in Seconds">
+            <span class="live-pulse-dot"></span>
+            <span class="live-clock-time" id="live-clock-time">Loading...</span>
+            <span class="live-clock-role">ADMIN</span>
+          </div>
+          
+          <a class="user-chip" href="login.html" title="Sign out">
+            <span>System Administrator</span><b>↗</b>
+          </a>
+        </div>
+      </header>
+      
+        
+      
+      
+<section class="page-intro">
+  <div>
+    <p class="kicker">Inventory / new record</p>
+    <h1>List surplus food</h1>
+    <p>Capture the information a receiver needs to act quickly.</p>
+  </div>
+</section>
+
+<form class="form-layout" method="post">
+  <section class="panel form-panel">
+    <div class="form-head">
+      <span class="step">01</span>
+      <div>
+        <h2>Food details</h2>
+        <p>Describe the exact food so receivers can find what they need.</p>
+      </div>
+    </div>
+    <div class="form-grid">
+      <label>Food name
+        <input name="food_name" required placeholder="e.g. Chicken biryani">
+      </label>
+      <label>Vegetarian or non-vegetarian
+        <select name="dietary_type" required>
+          <option value="Vegetarian">Vegetarian</option>
+          <option value="Non-vegetarian">Non-vegetarian</option>
+        </select>
+      </label>
+      <label class="full">Exact food item
+        <input name="food_item" required placeholder="Write the literal name: Chicken, Chicken biryani, Cabbage, Rohu fish">
+      </label>
+      <label>Location
+        <input name="location" value="Manipal" required placeholder="e.g. Manipal">
+      </label>
+      <label>Category
+        <select name="category" required>
+          <option>Prepared Meals</option>
+          <option>Fresh Produce</option>
+          <option>Fish</option>
+          <option>Meat</option>
+          <option>Bakery</option>
+          <option>Dairy</option>
+          <option>Staples</option>
+          <option>Other</option>
+        </select>
+      </label>
+      <label>Quantity (kg)
+        <input name="quantity_kg" type="number" min="0.1" step="0.1" required placeholder="0.0">
+      </label>
+      <label>Available from
+        <input name="listed_at" type="datetime-local" required>
+      </label>
+      <label>Collection deadline
+        <input name="expiry_at" type="datetime-local" required>
+      </label>
+      <label class="full">Notes <span class="optional">optional</span>
+        <textarea name="description" rows="4" placeholder="Packing notes, allergens, handling information..."></textarea>
+      </label>
+    </div>
+  </section>
+  <aside class="form-aside">
+    <div class="aside-icon">↗</div>
+    <h3>Good data moves faster.</h3>
+    <p>Accurate food type, dietary label, quantity and deadline help NGOs request exactly what they need.</p>
+    <button class="button button-dark full-button" type="submit">Publish listing →</button>
+    <a class="cancel-link" href="listings.html">Cancel</a>
+  </aside>
+</form>
+
+    </main>
+  </div>
+    <script src="static/db_data.js"></script>
+  <script src="static/static_engine.js"></script>
+  <script src="static/app.js"></script>
+</body>
+</html>
